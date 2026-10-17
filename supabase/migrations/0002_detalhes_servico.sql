@@ -2,9 +2,9 @@
 alter table manutencoes add column servico text not null default '';
 
 -- Tecnico pode corrigir modelo e local ao ler o QR; qualquer outra coluna continua restrita.
-drop policy equip_edita on equipamentos;
-create policy equip_edita on equipamentos for update to authenticated
-  using (papel_atual() in ('admin', 'tecnico'));
+-- (politicas somam permissoes: admin segue em equip_edita; o gatilho abaixo limita as colunas do tecnico)
+create policy equip_edita_tecnico on equipamentos for update to authenticated
+  using (papel_atual() = 'tecnico');
 
 create function restringe_edicao_equipamento() returns trigger
 language plpgsql security definer set search_path = public as $$

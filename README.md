@@ -10,7 +10,7 @@ Monorepo com dois PWAs (React + Vite + TypeScript) sobre Supabase.
 | `supabase/migrations` | Banco, índices, RLS por papel (`tecnico`, `admin`) |
 
 ## Como rodar
-1. Crie um projeto Supabase e aplique `supabase/migrations/0001_init.sql` e `0002_detalhes_servico.sql`.
+1. Projeto Supabase `rede-frio-manutencao` (região sa-east-1, ref `pzxmlcwuvupqhihcoglb`) já criado e com as migrações `0001`–`0003` aplicadas. Para recriar do zero, aplique-as em ordem.
 2. Crie os usuários em Authentication e uma linha em `perfis` para cada um (nome + papel).
 3. `cp .env.example .env` e preencha.
 4. `npm install`, depois `npm run dev:tecnico` (porta 5173) ou `npm run dev:admin` (5174).

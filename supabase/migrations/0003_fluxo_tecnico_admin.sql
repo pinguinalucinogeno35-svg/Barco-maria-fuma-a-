@@ -13,9 +13,8 @@ alter table equipamentos
   add constraint equipamentos_codigo_fk foreign key (codigo) references etiquetas (codigo);
 
 -- Tecnico tambem cadastra equipamento (id gerado no celular, para funcionar offline).
-drop policy equip_escreve on equipamentos;
-create policy equip_escreve on equipamentos for insert to authenticated
-  with check (papel_atual() in ('admin', 'tecnico'));
+create policy equip_escreve_tecnico on equipamentos for insert to authenticated
+  with check (papel_atual() = 'tecnico');
 
 -- Servicos: admin corrige e cancela; nada e apagado.
 alter table manutencoes
