@@ -4,12 +4,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { _resetDb, enfileirar, pendentes, sincronizar, type Pendente } from './offline';
 
 const base = (id: string): Omit<Pendente, 'tentativas' | 'criado_em'> => ({
-  id, equipamento_id: 'e1', tecnico_id: 't1', tipo: 'preventiva',
+  id, equipamento_id: 'e1', tecnico_id: 't1', tipo: 'preventiva', servico: 'Limpeza de filtros',
   checklist: {}, observacoes: null, executada_em: new Date().toISOString(), fotos: [],
 });
 
-function sbFalso(insert: (row: any) => { error: any }) {
-  return { from: () => ({ insert: async (r: any) => insert(r) }), storage: {} } as any;
+function sbFalso(insert: (row: any) => { error: any }, update: () => { error: any } = () => ({ error: null })) {
+  return { from: () => ({ insert: async (r: any) => insert(r), update: () => ({ eq: async () => update() }) }), storage: {} } as any;
 }
 
 beforeEach(() => { globalThis.indexedDB = new IDBFactory(); _resetDb(); });
@@ -41,5 +41,23 @@ describe('sincronizar', () => {
     const p = await pendentes();
     expect(p).toHaveLength(1);
     expect(p[0].erro).toBe('rls');
+  });
+});
+
+describe('edicoes de equipamento', () => {
+  it('envia a edicao e atualiza a ficha em cache', async () => {
+    const { enfileirarEdicao, salvarFicha, lerFicha, edicoesPendentes } = await import('./offline');
+    await salvarFicha('AC-X', { equipamento: { id: 'e1', modelo: null, local_instalacao: null } as any, cliente_nome: 'C', historico: [] });
+    await enfileirarEdicao('AC-X', 'e1', { modelo: 'Inverter 12k', local_instalacao: 'Sala 2' });
+    expect((await lerFicha('AC-X'))!.equipamento.modelo).toBe('Inverter 12k');
+    const r = await sincronizar(sbFalso(() => ({ error: null })));
+    expect(r.restantes).toBe(0);
+    expect(await edicoesPendentes()).toHaveLength(0);
+  });
+  it('mantem a edicao se estiver sem rede', async () => {
+    const { enfileirarEdicao, edicoesPendentes } = await import('./offline');
+    await enfileirarEdicao('AC-X', 'e1', { modelo: 'A', local_instalacao: null });
+    await sincronizar(sbFalso(() => ({ error: null }), () => ({ error: { message: 'Failed to fetch' } })));
+    expect(await edicoesPendentes()).toHaveLength(1);
   });
 });
