@@ -1,0 +1,23 @@
+:root { --cor: #0b6fb8; --cor-esc: #084f85; --fundo: #f3f6f9; --texto: #14212b; --borda: #d5dde5; --ok: #1a7f4b; --alerta: #b45309; --erro: #b91c1c;
+  color-scheme: light; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+@media (prefers-color-scheme: dark) { :root { --fundo: #0e1620; --texto: #e6edf3; --borda: #2b3a48; --cor: #4aa3e8; --cor-esc: #7bbcf0; color-scheme: dark; } }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--fundo); color: var(--texto); }
+.app { max-width: 640px; margin: 0 auto; padding: 0 16px 96px; }
+header.topo { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 8px; }
+header.topo h1 { font-size: 1.15rem; margin: 0; }
+.cartao { background: color-mix(in srgb, var(--fundo) 60%, white 40%); border: 1px solid var(--borda); border-radius: 12px; padding: 14px; margin: 12px 0; }
+@media (prefers-color-scheme: dark) { .cartao { background: #17222e; } }
+label { display: block; font-size: .85rem; margin: 12px 0; font-weight: 600; }
+input, select, textarea { width: 100%; font: inherit; padding: 12px; margin-top: 4px; border: 1px solid var(--borda); border-radius: 10px; background: transparent; color: inherit; min-height: 48px; }
+button { font: inherit; min-height: 48px; padding: 0 18px; border-radius: 10px; border: 1px solid var(--borda); background: transparent; color: inherit; cursor: pointer; }
+button.primario { background: var(--cor); color: #fff; border-color: var(--cor); font-weight: 600; width: 100%; }
+button:disabled { opacity: .55; }
+.erro { color: var(--erro); } .ok { color: var(--ok); } .alerta { color: var(--alerta); }
+.login { max-width: 360px; margin: 12vh auto; padding: 0 16px; }
+.faixa { position: sticky; top: 0; z-index: 5; padding: 8px 12px; font-size: .85rem; text-align: center; background: var(--alerta); color: #fff; }
+.checklist label { display: flex; gap: 12px; align-items: center; font-weight: 400; margin: 0; padding: 12px 0; border-bottom: 1px solid var(--borda); }
+.checklist input { width: 24px; height: 24px; min-height: 0; margin: 0; }
+ul.lista { list-style: none; padding: 0; margin: 0; } ul.lista li { padding: 12px 0; border-bottom: 1px solid var(--borda); }
+a { color: var(--cor); }
+@media print { .nao-imprime { display: none !important; } body { background: #fff; color: #000; } }
