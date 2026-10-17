@@ -41,6 +41,9 @@ export interface Manutencao {
   observacoes: string | null;
   fotos: string[];
   executada_em: string;
+  cancelada_em: string | null;
+  cancelada_motivo: string | null;
+  editada_em: string | null;
 }
 
 export interface EdicaoEquipamento { modelo: string | null; local_instalacao: string | null }

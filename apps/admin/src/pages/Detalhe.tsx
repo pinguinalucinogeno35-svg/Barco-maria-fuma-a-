@@ -30,14 +30,14 @@ export function Detalhe() {
         <h2 style={{ margin: 0 }}>{eq.marca} {eq.modelo}{eq.btus ? ` · ${eq.btus} BTU` : ''}</h2>
         <p style={{ margin: '4px 0' }}>{eq.clientes?.nome} — {eq.local_instalacao ?? 'local não informado'}</p>
         <small>{eq.codigo} · Série {eq.numero_serie ?? '—'} · {eq.clientes?.telefone ?? ''} {eq.clientes?.endereco ?? ''}</small>
-        <p style={{ marginBottom: 0 }}><Link to={`/etiqueta/${eq.codigo}`}>Etiqueta QR</Link></p>
+        <p style={{ marginBottom: 0 }}><Link to={`/e/${eq.codigo}/editar`}>Editar aparelho</Link> · <Link to={`/etiqueta/${eq.codigo}`}>Etiqueta QR</Link></p>
       </div>
       <h3>Histórico ({hist.length})</h3>
       <ul className="lista">
         {hist.map((m) => (
-          <li key={m.id}>
+          <li key={m.id} className={m.cancelada_em ? 'cancelado' : ''}>
             <strong>{NOME_TIPO[m.tipo]}</strong> · {dataHora(m.executada_em)} · {m.tecnico_nome}<br />
-            {m.servico}{m.observacoes ? <><br /><small>{m.observacoes}</small></> : null}
+            {m.servico}{m.observacoes ? <><br /><small>{m.observacoes}</small></> : null}<br /><Link to={`/servicos/${m.id}`}>Abrir / corrigir</Link>
           </li>
         ))}
         {!hist.length && <li>Nenhuma manutenção registrada.</li>}

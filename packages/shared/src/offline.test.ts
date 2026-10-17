@@ -61,3 +61,25 @@ describe('edicoes de equipamento', () => {
     expect(await edicoesPendentes()).toHaveLength(1);
   });
 });
+
+describe('equipamentos cadastrados offline', () => {
+  const dados: any = { id: 'n1', codigo: 'AC-AAAAAAAA', cliente_id: 'c1', marca: 'LG' };
+  it('envia o equipamento antes das manutencoes dele', async () => {
+    const { enfileirarEquipamento, lerFicha } = await import('./offline');
+    await enfileirarEquipamento(dados, 't1', 'Cliente X');
+    expect((await lerFicha('AC-AAAAAAAA'))!.cliente_nome).toBe('Cliente X');
+    await enfileirar({ ...base('m1'), equipamento_id: 'n1' });
+    const ordem: string[] = [];
+    const sb: any = { from: (t: string) => ({ insert: async (r: any) => (ordem.push(t), { error: null }) }), storage: {} };
+    const r = await sincronizar(sb);
+    expect(ordem).toEqual(['equipamentos', 'manutencoes']);
+    expect(r.restantes).toBe(0);
+  });
+  it('etiqueta ja usada por outra pessoa vira erro, sem travar a fila', async () => {
+    const { enfileirarEquipamento, novosPendentes } = await import('./offline');
+    await enfileirarEquipamento(dados, 't1', 'X');
+    const sb: any = { from: () => ({ insert: async () => ({ error: { code: '23505', message: 'duplicate key ... equipamentos_codigo_key' } }) }), storage: {} };
+    await sincronizar(sb);
+    expect((await novosPendentes())[0].erro).toMatch(/outra pessoa/);
+  });
+});

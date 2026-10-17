@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
-import { edicoesPendentes, pendentes, sincronizar } from '@ac/shared';
+import { edicoesPendentes, novosPendentes, pendentes, sincronizar } from '@ac/shared';
 import { sb } from './env';
 
 interface SyncCtx { online: boolean; fila: number; comErro: number; sincronizarAgora: () => Promise<void> }
@@ -13,7 +13,9 @@ export function SyncProvider({ children }: { children: ReactNode }) {
 
   const atualizar = useCallback(async () => {
     const p = await pendentes();
-    setFila(p.length + (await edicoesPendentes()).length); setComErro(p.filter((x) => x.erro).length);
+    const n = await novosPendentes();
+    setFila(p.length + (await edicoesPendentes()).length + n.length);
+    setComErro(p.filter((x) => x.erro).length + n.filter((x) => x.erro).length);
   }, []);
 
   const sincronizarAgora = useCallback(async () => {

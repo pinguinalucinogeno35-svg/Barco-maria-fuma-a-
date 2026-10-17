@@ -1,5 +1,5 @@
 import { openDB, type DBSchema, type IDBPDatabase } from 'idb';
-import type { Checklist, EdicaoEquipamento, EquipamentoStatus, Manutencao, TipoManutencao } from './types';
+import type { Checklist, Cliente, EdicaoEquipamento, Equipamento, EquipamentoStatus, Manutencao, TipoManutencao } from './types';
 import type { Supabase } from './supabase';
 
 export interface Pendente {
@@ -28,6 +28,17 @@ interface Schema extends DBSchema {
   fila: { key: string; value: Pendente; indexes: { por_criacao: number } };
   fichas: { key: string; value: Ficha }; // chave: codigo do equipamento
   edicoes: { key: string; value: PendenteEdicao };
+  novos: { key: string; value: PendenteEquipamento };
+  clientes: { key: string; value: Cliente };
+}
+
+export type DadosEquipamento = Omit<Equipamento, 'ativo'>;
+export interface PendenteEquipamento {
+  id: string; // = equipamento.id (gerado no celular)
+  dados: DadosEquipamento;
+  criado_por: string;
+  criado_em: number;
+  erro?: string;
 }
 
 export interface PendenteEdicao {
@@ -41,13 +52,17 @@ const MAX_FICHAS = 300;
 let dbPromise: Promise<IDBPDatabase<Schema>> | null = null;
 
 export function db() {
-  dbPromise ??= openDB<Schema>('ac-offline', 2, {
+  dbPromise ??= openDB<Schema>('ac-offline', 3, {
     upgrade(d, antiga) {
       if (antiga < 1) {
         d.createObjectStore('fila', { keyPath: 'id' }).createIndex('por_criacao', 'criado_em');
         d.createObjectStore('fichas');
       }
       if (antiga < 2) d.createObjectStore('edicoes', { keyPath: 'id' });
+      if (antiga < 3) {
+        d.createObjectStore('novos', { keyPath: 'id' });
+        d.createObjectStore('clientes', { keyPath: 'id' });
+      }
     },
   });
   return dbPromise;
@@ -66,6 +81,33 @@ export async function enfileirarEdicao(codigo: string, equipamentoId: string, pa
   await d.put('edicoes', { id: crypto.randomUUID(), equipamento_id: equipamentoId, patch, criado_em: Date.now() });
   const f = await d.get('fichas', codigo);
   if (f) await d.put('fichas', { ...f, equipamento: { ...f.equipamento, ...patch } }, codigo);
+}
+
+/** Cadastra no celular um equipamento com etiqueta nova; ja aparece na ficha offline. */
+export async function enfileirarEquipamento(dados: DadosEquipamento, criadoPor: string, clienteNome: string) {
+  const d = await db();
+  await d.put('novos', { id: dados.id, dados, criado_por: criadoPor, criado_em: Date.now() });
+  await salvarFicha(dados.codigo, {
+    equipamento: { ...dados, ativo: true, ultima_manutencao: null, proxima_manutencao: null },
+    cliente_nome: clienteNome,
+    historico: [],
+  });
+}
+
+export async function novosPendentes(): Promise<PendenteEquipamento[]> {
+  return (await (await db()).getAll('novos')).sort((a, b) => a.criado_em - b.criado_em);
+}
+
+export async function salvarClientes(lista: Cliente[]) {
+  const d = await db();
+  const tx = d.transaction('clientes', 'readwrite');
+  await tx.store.clear();
+  for (const c of lista) await tx.store.put(c);
+  await tx.done;
+}
+
+export async function lerClientes(): Promise<Cliente[]> {
+  return (await (await db()).getAll('clientes')).sort((a, b) => a.nome.localeCompare(b.nome, 'pt-BR'));
 }
 
 export async function edicoesPendentes(): Promise<PendenteEdicao[]> {
@@ -104,6 +146,7 @@ const ERRO_PERMANENTE = new Set(['42501', '23503', '22P02', '23514']);
  * reenviar o mesmo registro (insert com id fixo; duplicata conta como sucesso).
  */
 let sincronizando = false;
+const total = async () => (await pendentes()).length + (await edicoesPendentes()).length + (await novosPendentes()).length;
 export async function sincronizar(sb: Supabase): Promise<{ enviados: number; restantes: number }> {
   if (sincronizando) return { enviados: 0, restantes: (await pendentes()).length };
   sincronizando = true;
@@ -114,9 +157,21 @@ export async function sincronizar(sb: Supabase): Promise<{ enviados: number; res
     for (const ed of await edicoesPendentes()) {
       const { error } = await sb.from('equipamentos').update(ed.patch).eq('id', ed.equipamento_id);
       if (error && (!error.code || !ERRO_PERMANENTE.has(error.code))) {
-        return { enviados, restantes: (await pendentes()).length + (await edicoesPendentes()).length };
+        return { enviados, restantes: await total() };
       }
       await d.delete('edicoes', ed.id);
+    }
+    for (const n of await novosPendentes()) {
+      const { error } = await sb.from('equipamentos').insert({ ...n.dados, criado_por: n.criado_por });
+      // 23505 no id = reenvio do mesmo registro (ok); 23505 no codigo = outra pessoa cadastrou a etiqueta antes
+      const reenvio = error?.code === '23505' && !/codigo/.test(error.message ?? '');
+      if (error && !reenvio) {
+        const permanente = error.code === '23505' || (!!error.code && ERRO_PERMANENTE.has(error.code));
+        if (!permanente) return { enviados, restantes: await total() };
+        await d.put('novos', { ...n, erro: error.code === '23505' ? 'Etiqueta já cadastrada por outra pessoa' : error.message });
+        continue;
+      }
+      await d.delete('novos', n.id);
     }
     for (const p of await pendentes()) {
       try {
@@ -157,5 +212,5 @@ export async function sincronizar(sb: Supabase): Promise<{ enviados: number; res
   } finally {
     sincronizando = false;
   }
-  return { enviados, restantes: (await pendentes()).length + (await edicoesPendentes()).length };
+  return { enviados, restantes: await total() };
 }

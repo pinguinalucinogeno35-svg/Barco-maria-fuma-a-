@@ -5,7 +5,7 @@ Monorepo com dois PWAs (React + Vite + TypeScript) sobre Supabase.
 | Pasta | O que é |
 |---|---|
 | `apps/tecnico` | Técnicos: escaneiam o QR, veem o histórico, registram manutenção (**funciona offline**) |
-| `apps/admin` | Administração: cadastra cliente + equipamento, imprime etiquetas QR, vê histórico e aparelhos com manutenção vencida |
+| `apps/admin` | Administração: clientes, aparelhos, lotes de etiquetas QR, todos os serviços (filtro por funcionário/período/tipo, correção e cancelamento), aparelhos vencidos |
 | `packages/shared` | Tipos, login, código/QR, fila offline e sincronização |
 | `supabase/migrations` | Banco, índices, RLS por papel (`tecnico`, `admin`) |
 
@@ -16,11 +16,16 @@ Monorepo com dois PWAs (React + Vite + TypeScript) sobre Supabase.
 4. `npm install`, depois `npm run dev:tecnico` (porta 5173) ou `npm run dev:admin` (5174).
 5. `npm test` · `npm run typecheck` · `npm run build`
 
+## Fluxo
+1. **Admin** cadastra os clientes e gera lotes de etiquetas QR em branco para imprimir (aba Etiquetas).
+2. **Técnico** cola a etiqueta no aparelho e a lê com o app: se for nova, cadastra o aparelho (cliente, marca, modelo, local…) e já lança o serviço. Tudo funciona offline.
+3. **Técnico** vê em *Meus serviços* a contagem (hoje/mês/total) e os detalhes do que fez. **Admin** vê tudo, com resumo por funcionário no mês, e pode corrigir ou cancelar serviços (nada é apagado; cancelados não contam).
+
 ## Decisões para suportar 20 técnicos simultâneos / 5 mil aparelhos
 - **QR = URL** `https://<app-tecnico>/e/AC-XXXXXXXX`. O código é aleatório (sem número sequencial adivinhável) e a etiqueta usa correção de erro alta.
 - **Offline-first no técnico:** registros vão para uma fila no IndexedDB e sincronizam ao voltar o sinal. Cada registro tem UUID gerado no celular, então reenviar nunca duplica. Fichas dos equipamentos abertos ficam em cache (até 300).
 - **Detalhes ao ler o QR:** o técnico edita modelo e local (também offline; o banco bloqueia qualquer outra coluna). Cada manutenção guarda serviço, data e hora (editáveis, padrão agora) e o histórico mostra o nome de quem fez. O nome é gravado em cada registro pelo banco (`tecnico_nome`), então trocar ou desativar o perfil depois não altera o histórico.
-- **Histórico imutável:** RLS permite só `insert` em `manutencoes`; técnico só registra em seu próprio nome.
+- **Histórico protegido:** técnico só insere serviços em seu próprio nome e não edita; só o admin corrige/cancela, com registro de quem e quando. Ninguém apaga.
 - **Fotos** são reduzidas no celular (~200 KB) e vão para o bucket privado `manutencoes`.
 - **Listas** paginadas e filtradas no servidor; índices em `(equipamento_id, executada_em)`.
 - ~170 serviços/dia é carga leve para um Postgres gerenciado; o gargalo real seria sinal fraco, tratado pela fila offline.

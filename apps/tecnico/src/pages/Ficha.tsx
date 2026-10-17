@@ -36,9 +36,15 @@ export function Ficha() {
     (async () => {
       const { data, error } = await sb.from('equipamentos_status').select('*, clientes(nome)').eq('codigo', codigo).maybeSingle();
       if (!vivo) return;
-      if (!error && !data) { setEstado('inexistente'); return; }
+      if (!error && !data) {
+        // aparelho cadastrado neste celular e ainda nao enviado
+        const local = await lerFicha(codigo);
+        if (!vivo) return;
+        if (local) { setFicha(local); setDoCache(false); setEstado('ok'); } else setEstado('inexistente');
+        return;
+      }
       if (!error && data) {
-        const { data: hist } = await sb.from('manutencoes').select('*').eq('equipamento_id', data.id)
+        const { data: hist } = await sb.from('manutencoes').select('*').eq('equipamento_id', data.id).is('cancelada_em', null)
           .order('executada_em', { ascending: false }).limit(50);
         const { clientes, ...equipamento } = data as any;
         const nova = { equipamento, cliente_nome: clientes?.nome ?? '', historico: hist ?? [] };
@@ -59,8 +65,15 @@ export function Ficha() {
   }, [ficha, fila]);
 
   if (estado === 'carregando') return <p>Carregando…</p>;
-  if (estado === 'inexistente') return <p className="erro">Equipamento {codigo} não cadastrado.</p>;
-  if (estado === 'sem-dados') return <p className="erro">Sem internet e este equipamento nunca foi aberto neste celular.</p>;
+  if (estado === 'inexistente' || estado === 'sem-dados')
+    return (
+      <div className="cartao">
+        <h2 style={{ marginTop: 0 }}>Etiqueta nova</h2>
+        <p>{estado === 'inexistente' ? 'Este QR ainda não tem um aparelho cadastrado.' : 'Sem internet e este aparelho nunca foi aberto neste celular. Se a etiqueta for nova, você pode cadastrar agora.'}</p>
+        <small>{codigo}</small>
+        <Link to="cadastrar"><button className="primario" style={{ marginTop: 12 }}>Cadastrar aparelho</button></Link>
+      </div>
+    );
   const { equipamento: e, cliente_nome, historico } = ficha!;
   const vencida = e.proxima_manutencao && new Date(e.proxima_manutencao) < new Date();
 

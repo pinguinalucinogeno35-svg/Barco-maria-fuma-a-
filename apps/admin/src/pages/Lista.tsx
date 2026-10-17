@@ -29,8 +29,11 @@ export function Lista() {
 
   return (
     <>
-      <input type="search" placeholder="Buscar por código, marca ou série" value={busca}
-        onChange={(e) => { setBusca(e.target.value); setPagina(0); }} />
+      <div className="linha-acoes" style={{ marginBottom: 8 }}>
+        <input type="search" style={{ flex: 1, marginTop: 0 }} placeholder="Buscar por código, marca ou série" value={busca}
+          onChange={(e) => { setBusca(e.target.value); setPagina(0); }} />
+        <Link to="/novo"><button className="primario" style={{ width: 'auto' }}>+ Aparelho</button></Link>
+      </div>
       <label style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
         <input type="checkbox" style={{ width: 22, height: 22, minHeight: 0, margin: 0 }} checked={soVencidas}
           onChange={(e) => { setSoVencidas(e.target.checked); setPagina(0); }} />
@@ -42,7 +45,7 @@ export function Lista() {
           <li key={e.id}>
             <strong>{e.marca} {e.modelo}</strong> · {e.clientes?.nome}<br />
             <small>{e.codigo} · {e.local_instalacao ?? 'sem local'} · próxima: {e.proxima_manutencao ? new Date(e.proxima_manutencao).toLocaleDateString('pt-BR') : '—'}</small>{' '}
-            <Link to={`/e/${e.codigo}`}>Histórico</Link> · <Link to={`/etiqueta/${e.codigo}`}>Etiqueta QR</Link>
+            <Link to={`/e/${e.codigo}`}>Histórico</Link> · <Link to={`/e/${e.codigo}/editar`}>Editar</Link> · <Link to={`/etiqueta/${e.codigo}`}>Etiqueta QR</Link>
           </li>
         ))}
         {!linhas.length && <li>Nenhum equipamento encontrado.</li>}

@@ -1,9 +1,11 @@
-import { Link, Route, Routes, useLocation } from 'react-router-dom';
+import { Link, Route, Routes } from 'react-router-dom';
 import { Login, Logo, useAuth } from '@ac/shared';
 import { SyncProvider, useSync } from './sync';
 import { Inicio } from './pages/Inicio';
 import { Ficha } from './pages/Ficha';
 import { NovaManutencao } from './pages/NovaManutencao';
+import { CadastrarEquipamento } from './pages/CadastrarEquipamento';
+import { MeusServicos } from './pages/MeusServicos';
 
 function Faixa() {
   const { online, fila, comErro } = useSync();
@@ -18,7 +20,6 @@ function Faixa() {
 
 export function App() {
   const { session, perfil, carregando, sair } = useAuth();
-  const { pathname } = useLocation();
   if (carregando) return <p style={{ padding: 24 }}>Carregando…</p>;
   if (!session) return <Login app="Técnico" />;
   if (!perfil || (perfil.papel !== 'tecnico' && perfil.papel !== 'admin'))
@@ -30,13 +31,15 @@ export function App() {
       <div className="app">
         <header className="topo">
           <Link to="/"><Logo largura={104} claro subtitulo={false} /></Link><span className="rotulo-app">Técnico</span><span className="espaco" />
-          {pathname !== '/' && <Link to="/">Início</Link>}
+          <Link to="/meus-servicos">Meus serviços</Link>
           <button onClick={sair}>Sair</button>
         </header>
         <Routes>
           <Route path="/" element={<Inicio />} />
           <Route path="/e/:codigo" element={<Ficha />} />
           <Route path="/e/:codigo/nova" element={<NovaManutencao />} />
+          <Route path="/e/:codigo/cadastrar" element={<CadastrarEquipamento />} />
+          <Route path="/meus-servicos" element={<MeusServicos />} />
           <Route path="*" element={<p>Página não encontrada.</p>} />
         </Routes>
       </div>

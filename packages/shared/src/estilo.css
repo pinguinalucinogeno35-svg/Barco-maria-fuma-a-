@@ -66,3 +66,9 @@ a { color: var(--azul); }
   body { background: #fff; }
   .etiqueta { box-shadow: none; border: 1px solid #000; page-break-inside: avoid; }
 }
+
+.abas { display: flex; gap: 6px; overflow-x: auto; margin: 0 0 12px; }
+.abas a { flex: 1; text-align: center; white-space: nowrap; padding: 10px 14px; border-radius: 999px; background: #fff; border: 1px solid var(--borda); color: var(--azul); text-decoration: none; font-size: .85rem; font-weight: 500; }
+.abas a.active { background: var(--azul); color: #fff; border-color: var(--azul); }
+.linha-acoes { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.cancelado { text-decoration: line-through; opacity: .6; }
