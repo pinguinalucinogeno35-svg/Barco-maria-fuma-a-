@@ -38,7 +38,7 @@ export function Ficha() {
       if (!vivo) return;
       if (!error && !data) { setEstado('inexistente'); return; }
       if (!error && data) {
-        const { data: hist } = await sb.from('manutencoes').select('*, perfis(nome)').eq('equipamento_id', data.id)
+        const { data: hist } = await sb.from('manutencoes').select('*').eq('equipamento_id', data.id)
           .order('executada_em', { ascending: false }).limit(50);
         const { clientes, ...equipamento } = data as any;
         const nova = { equipamento, cliente_nome: clientes?.nome ?? '', historico: hist ?? [] };
@@ -92,7 +92,7 @@ export function Ficha() {
           <li key={p.id}><strong>{NOME_TIPO[p.tipo]}</strong> · {dataBR(p.executada_em)} às {horaBR(p.executada_em)} · {perfil?.nome}<br />{p.servico}<br /><span className="alerta">— aguardando envio{p.erro ? ` (erro: ${p.erro})` : ''}</span></li>
         ))}
         {historico.map((m) => (
-          <li key={m.id}><strong>{NOME_TIPO[m.tipo]}</strong> · {dataBR(m.executada_em)} às {horaBR(m.executada_em)} · {m.perfis?.nome ?? 'Técnico'}<br />{m.servico}{m.observacoes ? <><br /><small>{m.observacoes}</small></> : null}</li>
+          <li key={m.id}><strong>{NOME_TIPO[m.tipo]}</strong> · {dataBR(m.executada_em)} às {horaBR(m.executada_em)} · {m.tecnico_nome}<br />{m.servico}{m.observacoes ? <><br /><small>{m.observacoes}</small></> : null}</li>
         ))}
         {!historico.length && !locais.length && <li>Nenhuma manutenção registrada.</li>}
       </ul>

@@ -36,13 +36,12 @@ export interface Manutencao {
   tecnico_id: string;
   tipo: TipoManutencao;
   checklist: Checklist;
+  tecnico_nome: string;
   servico: string;
   observacoes: string | null;
   fotos: string[];
   executada_em: string;
 }
-
-export type ManutencaoComTecnico = Manutencao & { perfis: { nome: string } | null };
 
 export interface EdicaoEquipamento { modelo: string | null; local_instalacao: string | null }
 

@@ -1,5 +1,5 @@
 import { openDB, type DBSchema, type IDBPDatabase } from 'idb';
-import type { Checklist, EdicaoEquipamento, EquipamentoStatus, ManutencaoComTecnico, TipoManutencao } from './types';
+import type { Checklist, EdicaoEquipamento, EquipamentoStatus, Manutencao, TipoManutencao } from './types';
 import type { Supabase } from './supabase';
 
 export interface Pendente {
@@ -20,7 +20,7 @@ export interface Pendente {
 export interface Ficha {
   equipamento: EquipamentoStatus;
   cliente_nome: string;
-  historico: ManutencaoComTecnico[];
+  historico: Manutencao[];
   salvo_em: number;
 }
 

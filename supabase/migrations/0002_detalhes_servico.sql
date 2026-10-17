@@ -19,3 +19,16 @@ begin
 end $$;
 create trigger equipamentos_restringe before update on equipamentos
   for each row execute function restringe_edicao_equipamento();
+
+-- Nome do tecnico congelado em cada registro: renomear ou desativar o perfil
+-- depois nao altera o historico. Preenchido pelo banco, nao pelo celular.
+alter table manutencoes add column tecnico_nome text not null default '';
+
+create function congela_nome_tecnico() returns trigger
+language plpgsql security definer set search_path = public as $$
+begin
+  select nome into new.tecnico_nome from perfis where id = new.tecnico_id;
+  return new;
+end $$;
+create trigger manutencoes_nome before insert on manutencoes
+  for each row execute function congela_nome_tecnico();
