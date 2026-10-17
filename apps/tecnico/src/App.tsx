@@ -1,5 +1,5 @@
 import { Link, Route, Routes, useLocation } from 'react-router-dom';
-import { Login, useAuth } from '@ac/shared';
+import { Login, Logo, useAuth } from '@ac/shared';
 import { SyncProvider, useSync } from './sync';
 import { Inicio } from './pages/Inicio';
 import { Ficha } from './pages/Ficha';
@@ -20,7 +20,7 @@ export function App() {
   const { session, perfil, carregando, sair } = useAuth();
   const { pathname } = useLocation();
   if (carregando) return <p style={{ padding: 24 }}>Carregando…</p>;
-  if (!session) return <Login />;
+  if (!session) return <Login app="Técnico" />;
   if (!perfil || (perfil.papel !== 'tecnico' && perfil.papel !== 'admin'))
     return <div className="app"><p className="erro">Seu usuário não tem acesso ao app de técnico. Fale com a administração.</p><button onClick={sair}>Sair</button></div>;
 
@@ -29,7 +29,7 @@ export function App() {
       <Faixa />
       <div className="app">
         <header className="topo">
-          <h1><Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>AC Técnico</Link></h1>
+          <Link to="/"><Logo largura={104} claro subtitulo={false} /></Link><span className="rotulo-app">Técnico</span><span className="espaco" />
           {pathname !== '/' && <Link to="/">Início</Link>}
           <button onClick={sair}>Sair</button>
         </header>

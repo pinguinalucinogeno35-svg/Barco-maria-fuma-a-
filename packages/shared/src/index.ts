@@ -4,3 +4,4 @@ export * from './supabase';
 export * from './offline';
 export * from './imagem';
 export * from './auth';
+export * from './Logo';

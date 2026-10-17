@@ -10,13 +10,13 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'AC Técnico',
-        short_name: 'AC Técnico',
+        name: 'Rede Frio Técnico',
+        short_name: 'RF Técnico',
         lang: 'pt-BR',
         start_url: '/',
         display: 'standalone',
-        background_color: '#f3f6f9',
-        theme_color: '#0b6fb8',
+        background_color: '#f6fcfe',
+        theme_color: '#072a69',
         icons: [
           { src: 'icone-192.png', sizes: '192x192', type: 'image/png' },
           { src: 'icone-512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' },

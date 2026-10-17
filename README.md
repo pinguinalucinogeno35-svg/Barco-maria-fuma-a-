@@ -31,3 +31,6 @@ Monorepo com dois PWAs (React + Vite + TypeScript) sobre Supabase.
 - Fotos do histórico ainda não são exibidas (guardamos o caminho; falta gerar URL assinada).
 - Ícones são provisórios (`scripts/gerar-icones.mjs`).
 - Não testado em celular real nem contra um Supabase real: a migração não foi aplicada nesta sessão.
+
+## Identidade visual
+Cores e fonte (Poppins, empacotada para funcionar offline) vêm do site da Rede Frio e ficam em `packages/shared/src/estilo.css` (variáveis `--marinho`, `--azul`, …). O logo em `packages/shared/src/Logo.tsx` foi **recriado em SVG a partir de um print**: trocar pelo arquivo oficial. Ícones do PWA: `node scripts/gerar-icones.mjs`.

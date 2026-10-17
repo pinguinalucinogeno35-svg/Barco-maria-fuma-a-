@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import type { Supabase } from './supabase';
+import { Logo } from './Logo';
 import type { Papel } from './types';
 
 export interface Perfil { id: string; nome: string; papel: Papel }
@@ -43,7 +44,7 @@ export function AuthProvider({ sb, children }: { sb: Supabase; children: ReactNo
   return <AuthCtx.Provider value={{ sb, session, perfil, carregando, sair }}>{children}</AuthCtx.Provider>;
 }
 
-export function Login() {
+export function Login({ app }: { app: string }) {
   const { sb } = useAuth();
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
@@ -60,7 +61,8 @@ export function Login() {
 
   return (
     <form className="login" onSubmit={entrar}>
-      <h1>Entrar</h1>
+      <Logo largura={190} />
+      <h1>{app}</h1>
       <label>E-mail<input type="email" autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} required /></label>
       <label>Senha<input type="password" autoComplete="current-password" value={senha} onChange={(e) => setSenha(e.target.value)} required /></label>
       {erro && <p className="erro">{erro}</p>}

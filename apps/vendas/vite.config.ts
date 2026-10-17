@@ -10,13 +10,13 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'AC Vendas',
-        short_name: 'AC Vendas',
+        name: 'Rede Frio Vendas',
+        short_name: 'RF Vendas',
         lang: 'pt-BR',
         start_url: '/',
         display: 'standalone',
-        background_color: '#f3f6f9',
-        theme_color: '#1a7f4b',
+        background_color: '#f6fcfe',
+        theme_color: '#072a69',
         icons: [
           { src: 'icone-192.png', sizes: '192x192', type: 'image/png' },
           { src: 'icone-512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' },

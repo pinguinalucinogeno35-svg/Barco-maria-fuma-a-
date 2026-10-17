@@ -1,23 +1,68 @@
-:root { --cor: #0b6fb8; --cor-esc: #084f85; --fundo: #f3f6f9; --texto: #14212b; --borda: #d5dde5; --ok: #1a7f4b; --alerta: #b45309; --erro: #b91c1c;
-  color-scheme: light; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
-@media (prefers-color-scheme: dark) { :root { --fundo: #0e1620; --texto: #e6edf3; --borda: #2b3a48; --cor: #4aa3e8; --cor-esc: #7bbcf0; color-scheme: dark; } }
+@import '@fontsource/poppins/latin-400.css';
+@import '@fontsource/poppins/latin-500.css';
+@import '@fontsource/poppins/latin-600.css';
+@import '@fontsource/poppins/latin-700.css';
+
+/* Identidade Rede Frio (cores medidas no site da cliente) */
+:root {
+  --marinho: #072a69;       /* faixas e rodape */
+  --marinho-prof: #061e43;
+  --titulo: #0d2a59;
+  --azul: #0d4b9a;          /* botoes */
+  --azul-vivo: #16539e;
+  --azul-claro: #bde0ff;
+  --fundo: #f6fcfe;
+  --fundo-azul: #e7f4fd;
+  --cartao: #ffffff;
+  --texto: #10295e;
+  --texto-suave: #5b6f94;
+  --borda: #d6e4f3;
+  --ok: #1a7f4b; --alerta: #b45309; --erro: #b91c1c;
+  --sombra: 0 8px 24px rgba(7, 42, 105, .08);
+  color-scheme: light;
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--fundo); color: var(--texto); }
+h1, h2, h3 { color: var(--titulo); font-weight: 600; letter-spacing: -.01em; }
+h2 { font-size: 1.35rem; margin: 20px 0 8px; } h3 { font-size: 1.05rem; }
 .app { max-width: 640px; margin: 0 auto; padding: 0 16px 96px; }
-header.topo { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 8px; }
-header.topo h1 { font-size: 1.15rem; margin: 0; }
-.cartao { background: color-mix(in srgb, var(--fundo) 60%, white 40%); border: 1px solid var(--borda); border-radius: 12px; padding: 14px; margin: 12px 0; }
-@media (prefers-color-scheme: dark) { .cartao { background: #17222e; } }
-label { display: block; font-size: .85rem; margin: 12px 0; font-weight: 600; }
-input, select, textarea { width: 100%; font: inherit; padding: 12px; margin-top: 4px; border: 1px solid var(--borda); border-radius: 10px; background: transparent; color: inherit; min-height: 48px; }
-button { font: inherit; min-height: 48px; padding: 0 18px; border-radius: 10px; border: 1px solid var(--borda); background: transparent; color: inherit; cursor: pointer; }
-button.primario { background: var(--cor); color: #fff; border-color: var(--cor); font-weight: 600; width: 100%; }
+
+/* Barra superior marinho, como a faixa do site */
+header.topo { background: var(--marinho); margin: 0 -16px 16px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; color: #fff; }
+header.topo a { color: #fff; text-decoration: none; font-size: .85rem; }
+header.topo .espaco { flex: 1; }
+header.topo button { min-height: 36px; padding: 0 14px; font-size: .8rem; color: #fff; border-color: rgba(255,255,255,.35); }
+.rotulo-app { font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--azul-claro); }
+.logo { display: block; height: auto; }
+
+.cartao { background: var(--cartao); border: 1px solid var(--borda); border-radius: 16px; padding: 16px; margin: 12px 0; box-shadow: var(--sombra); }
+label { display: block; font-size: .8rem; margin: 12px 0; font-weight: 500; color: var(--texto-suave); }
+input, select, textarea { width: 100%; font: inherit; color: var(--texto); padding: 12px 14px; margin-top: 4px; border: 1px solid var(--borda); border-radius: 12px; background: #fff; min-height: 48px; }
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--azul-claro); border-color: var(--azul); }
+button { font: inherit; font-weight: 500; min-height: 48px; padding: 0 20px; border-radius: 999px; border: 1px solid var(--borda); background: #fff; color: var(--azul); cursor: pointer; }
+button.primario { background: linear-gradient(135deg, var(--azul), var(--azul-vivo)); color: #fff; border: 0; font-weight: 600; width: 100%; box-shadow: 0 8px 18px rgba(13, 75, 154, .28); }
 button:disabled { opacity: .55; }
 .erro { color: var(--erro); } .ok { color: var(--ok); } .alerta { color: var(--alerta); }
-.login { max-width: 360px; margin: 12vh auto; padding: 0 16px; }
-.faixa { position: sticky; top: 0; z-index: 5; padding: 8px 12px; font-size: .85rem; text-align: center; background: var(--alerta); color: #fff; }
-.checklist label { display: flex; gap: 12px; align-items: center; font-weight: 400; margin: 0; padding: 12px 0; border-bottom: 1px solid var(--borda); }
-.checklist input { width: 24px; height: 24px; min-height: 0; margin: 0; }
+small, .suave { color: var(--texto-suave); }
+.etiqueta-topico { display: inline-flex; align-items: center; gap: 8px; font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; font-weight: 600; color: var(--azul); }
+.etiqueta-topico::before { content: ''; width: 18px; height: 2px; background: var(--azul-claro); }
+
+.login { max-width: 380px; margin: 0 auto; padding: 8vh 20px; }
+.login .logo { margin: 0 auto 8px; }
+.login form, form.login { display: block; }
+.login h1 { text-align: center; font-size: 1.3rem; margin: 8px 0 20px; }
+.faixa { position: sticky; top: 0; z-index: 5; padding: 8px 12px; font-size: .8rem; text-align: center; background: var(--alerta); color: #fff; }
+.checklist label { display: flex; gap: 12px; align-items: center; font-weight: 400; color: var(--texto); margin: 0; padding: 12px 0; border-bottom: 1px solid var(--borda); }
+.checklist input { width: 24px; height: 24px; min-height: 0; margin: 0; accent-color: var(--azul); }
 ul.lista { list-style: none; padding: 0; margin: 0; } ul.lista li { padding: 12px 0; border-bottom: 1px solid var(--borda); }
-a { color: var(--cor); }
-@media print { .nao-imprime { display: none !important; } body { background: #fff; color: #000; } }
+a { color: var(--azul); }
+
+/* Etiqueta impressa */
+.etiqueta { background: #fff; border: 1px solid var(--borda); border-radius: 16px; padding: 20px; max-width: 320px; margin: 0 auto; text-align: center; box-shadow: var(--sombra); }
+.etiqueta .codigo { font-family: ui-monospace, monospace; font-size: 1.1rem; font-weight: 700; letter-spacing: .08em; color: var(--marinho); margin: 4px 0; }
+@media print {
+  .nao-imprime { display: none !important; }
+  body { background: #fff; }
+  .etiqueta { box-shadow: none; border: 1px solid #000; page-break-inside: avoid; }
+}
