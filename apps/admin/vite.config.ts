@@ -10,8 +10,8 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'Rede Frio Vendas',
-        short_name: 'RF Vendas',
+        name: 'Rede Frio Admin',
+        short_name: 'RF Admin',
         lang: 'pt-BR',
         start_url: '/',
         display: 'standalone',

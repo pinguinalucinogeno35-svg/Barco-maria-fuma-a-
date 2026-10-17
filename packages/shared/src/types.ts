@@ -1,4 +1,4 @@
-export type Papel = 'tecnico' | 'vendedor' | 'admin';
+export type Papel = 'tecnico' | 'admin';
 export type TipoManutencao = 'preventiva' | 'corretiva' | 'instalacao' | 'limpeza';
 
 export interface Cliente {

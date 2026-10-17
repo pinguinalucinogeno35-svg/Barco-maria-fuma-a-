@@ -1,6 +1,6 @@
 -- Esquema inicial: equipamentos com QR, historico de manutencao, perfis e RLS.
 
-create type papel as enum ('tecnico', 'vendedor', 'admin');
+create type papel as enum ('tecnico', 'admin');
 create type tipo_manutencao as enum ('preventiva', 'corretiva', 'instalacao', 'limpeza');
 
 create table perfis (
@@ -84,15 +84,15 @@ create policy perfis_admin on perfis for all to authenticated
 
 create policy clientes_le on clientes for select to authenticated using (papel_atual() is not null);
 create policy clientes_escreve on clientes for insert to authenticated
-  with check (papel_atual() in ('vendedor', 'admin'));
+  with check (papel_atual() = 'admin');
 create policy clientes_edita on clientes for update to authenticated
-  using (papel_atual() in ('vendedor', 'admin'));
+  using (papel_atual() = 'admin');
 
 create policy equip_le on equipamentos for select to authenticated using (papel_atual() is not null);
 create policy equip_escreve on equipamentos for insert to authenticated
-  with check (papel_atual() in ('vendedor', 'admin'));
+  with check (papel_atual() = 'admin');
 create policy equip_edita on equipamentos for update to authenticated
-  using (papel_atual() in ('vendedor', 'admin'));
+  using (papel_atual() = 'admin');
 
 create policy manut_le on manutencoes for select to authenticated using (papel_atual() is not null);
 -- tecnico so registra em seu proprio nome; historico nunca e editado/apagado

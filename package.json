@@ -4,9 +4,9 @@
   "workspaces": ["packages/*", "apps/*"],
   "scripts": {
     "dev:tecnico": "npm run dev -w apps/tecnico",
-    "dev:vendas": "npm run dev -w apps/vendas",
-    "build": "npm run build -w apps/tecnico && npm run build -w apps/vendas",
-    "typecheck": "npm run typecheck -w packages/shared && npm run typecheck -w apps/tecnico && npm run typecheck -w apps/vendas",
+    "dev:admin": "npm run dev -w apps/admin",
+    "build": "npm run build -w apps/tecnico && npm run build -w apps/admin",
+    "typecheck": "npm run typecheck -w packages/shared && npm run typecheck -w apps/tecnico && npm run typecheck -w apps/admin",
     "test": "npm run test -w packages/shared"
   }
 }

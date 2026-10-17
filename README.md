@@ -5,15 +5,15 @@ Monorepo com dois PWAs (React + Vite + TypeScript) sobre Supabase.
 | Pasta | O que é |
 |---|---|
 | `apps/tecnico` | Técnicos: escaneiam o QR, veem o histórico, registram manutenção (**funciona offline**) |
-| `apps/vendas` | Vendedores: cadastram cliente + equipamento, geram e imprimem a etiqueta QR |
+| `apps/admin` | Administração: cadastra cliente + equipamento, imprime etiquetas QR, vê histórico e aparelhos com manutenção vencida |
 | `packages/shared` | Tipos, login, código/QR, fila offline e sincronização |
-| `supabase/migrations` | Banco, índices, RLS por papel (`tecnico`, `vendedor`, `admin`) |
+| `supabase/migrations` | Banco, índices, RLS por papel (`tecnico`, `admin`) |
 
 ## Como rodar
 1. Crie um projeto Supabase e aplique `supabase/migrations/0001_init.sql` e `0002_detalhes_servico.sql`.
 2. Crie os usuários em Authentication e uma linha em `perfis` para cada um (nome + papel).
 3. `cp .env.example .env` e preencha.
-4. `npm install`, depois `npm run dev:tecnico` (porta 5173) ou `npm run dev:vendas` (5174).
+4. `npm install`, depois `npm run dev:tecnico` (porta 5173) ou `npm run dev:admin` (5174).
 5. `npm test` · `npm run typecheck` · `npm run build`
 
 ## Decisões para suportar 20 técnicos simultâneos / 5 mil aparelhos
@@ -26,7 +26,7 @@ Monorepo com dois PWAs (React + Vite + TypeScript) sobre Supabase.
 - ~170 serviços/dia é carga leve para um Postgres gerenciado; o gargalo real seria sinal fraco, tratado pela fila offline.
 
 ## Limitações atuais / próximos passos
-- Falta o painel web de gestão (relatórios, agenda de vencidas, usuários).
+- O app de administração cobre cadastro, etiquetas, histórico e filtro de vencidas. Faltam relatórios e a gestão de funcionários (por ora os usuários são criados no painel do Supabase).
 - O técnico precisa abrir a ficha com internet ao menos uma vez antes de registrar offline (pré-carregar a rota do dia resolve).
 - Fotos do histórico ainda não são exibidas (guardamos o caminho; falta gerar URL assinada).
 - Ícones são provisórios (`scripts/gerar-icones.mjs`).

@@ -28,7 +28,7 @@ function png(size) {
   return Buffer.concat([Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]), chunk('IHDR', ihdr), chunk('IDAT', deflateSync(raw)), chunk('IEND', Buffer.alloc(0))]);
 }
 
-for (const app of ['tecnico', 'vendas']) {
+for (const app of ['tecnico', 'admin']) {
   const dir = `apps/${app}/public`;
   mkdirSync(dir, { recursive: true });
   for (const s of [192, 512]) writeFileSync(`${dir}/icone-${s}.png`, png(s));
