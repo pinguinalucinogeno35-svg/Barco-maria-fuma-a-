@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import type { EquipamentoStatus, Manutencao } from '@ac/shared';
+import { Fotos } from '@ac/shared';
 import { sb } from '../env';
 
 const TZ = 'America/Sao_Paulo';
@@ -37,7 +38,7 @@ export function Detalhe() {
         {hist.map((m) => (
           <li key={m.id} className={m.cancelada_em ? 'cancelado' : ''}>
             <strong>{NOME_TIPO[m.tipo]}</strong> · {dataHora(m.executada_em)} · {m.tecnico_nome}<br />
-            {m.servico}{m.observacoes ? <><br /><small>{m.observacoes}</small></> : null}<br /><Link to={`/servicos/${m.id}`}>Abrir / corrigir</Link>
+            {m.servico}{m.observacoes ? <><br /><small>{m.observacoes}</small></> : null}<Fotos caminhos={m.fotos} /><Link to={`/servicos/${m.id}`}>Abrir / corrigir</Link>
           </li>
         ))}
         {!hist.length && <li>Nenhuma manutenção registrada.</li>}

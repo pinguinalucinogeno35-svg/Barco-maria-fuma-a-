@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ITENS_CHECKLIST, useAuth, type Manutencao, type TipoManutencao } from '@ac/shared';
+import { Fotos, ITENS_CHECKLIST, useAuth, type Manutencao, type TipoManutencao } from '@ac/shared';
 import { sb } from '../env';
 
 const paraInput = (iso: string) => { const d = new Date(iso); return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 16); };
@@ -55,6 +55,7 @@ export function ServicoEditar() {
       <div className="cartao">
         <small>Checklist: {ITENS_CHECKLIST.filter((i) => m.checklist[i.chave]).map((i) => i.rotulo).join(', ') || 'nenhum item marcado'}</small>
       </div>
+      <Fotos caminhos={m.fotos} />
       {erro && <p className="erro">{erro}</p>}
       {!cancelado && (
         <>

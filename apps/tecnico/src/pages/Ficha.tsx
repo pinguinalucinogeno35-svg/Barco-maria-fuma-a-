@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { useAuth } from '@ac/shared';
+import { Fotos, useAuth } from '@ac/shared';
 import { enfileirarEdicao, lerFicha, pendentesDoEquipamento, salvarFicha, type Ficha as FichaT, type Pendente } from '@ac/shared';
 import { sb } from '../env';
 import { useSync } from '../sync';
@@ -105,7 +105,7 @@ export function Ficha() {
           <li key={p.id}><strong>{NOME_TIPO[p.tipo]}</strong> · {dataBR(p.executada_em)} às {horaBR(p.executada_em)} · {perfil?.nome}<br />{p.servico}<br /><span className="alerta">— aguardando envio{p.erro ? ` (erro: ${p.erro})` : ''}</span></li>
         ))}
         {historico.map((m) => (
-          <li key={m.id}><strong>{NOME_TIPO[m.tipo]}</strong> · {dataBR(m.executada_em)} às {horaBR(m.executada_em)} · {m.tecnico_nome}<br />{m.servico}{m.observacoes ? <><br /><small>{m.observacoes}</small></> : null}</li>
+          <li key={m.id}><strong>{NOME_TIPO[m.tipo]}</strong> · {dataBR(m.executada_em)} às {horaBR(m.executada_em)} · {m.tecnico_nome}<br />{m.servico}{m.observacoes ? <><br /><small>{m.observacoes}</small></> : null}<Fotos caminhos={m.fotos} /></li>
         ))}
         {!historico.length && !locais.length && <li>Nenhuma manutenção registrada.</li>}
       </ul>

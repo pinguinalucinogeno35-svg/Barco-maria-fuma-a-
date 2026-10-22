@@ -5,3 +5,4 @@ export * from './offline';
 export * from './imagem';
 export * from './auth';
 export * from './Logo';
+export * from './Fotos';

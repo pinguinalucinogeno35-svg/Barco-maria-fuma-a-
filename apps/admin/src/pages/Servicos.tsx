@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import type { Manutencao } from '@ac/shared';
+import { Fotos, type Manutencao } from '@ac/shared';
 import { sb } from '../env';
 
 type Linha = Manutencao & { equipamentos: { codigo: string; marca: string; modelo: string | null; local_instalacao: string | null; clientes: { nome: string } | null } | null };
@@ -79,7 +79,7 @@ export function Servicos() {
           <li key={m.id} className={m.cancelada_em ? 'cancelado' : ''}>
             <strong>{NOME_TIPO[m.tipo]}</strong> · {dataHora(m.executada_em)} · {m.tecnico_nome}<br />
             {m.equipamentos && <>{m.equipamentos.marca} {m.equipamentos.modelo} · {m.equipamentos.clientes?.nome}{m.equipamentos.local_instalacao ? ` — ${m.equipamentos.local_instalacao}` : ''}<br /></>}
-            {m.servico}{m.cancelada_motivo ? <><br /><small>Cancelado: {m.cancelada_motivo}</small></> : null}<br />
+            {m.servico}{m.cancelada_motivo ? <><br /><small>Cancelado: {m.cancelada_motivo}</small></> : null}<Fotos caminhos={m.fotos} />
             <Link to={`/servicos/${m.id}`}>Abrir / corrigir</Link>
           </li>
         ))}

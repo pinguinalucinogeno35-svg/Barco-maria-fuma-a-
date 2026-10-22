@@ -31,9 +31,8 @@ Monorepo com dois PWAs (React + Vite + TypeScript) sobre Supabase.
 - ~170 serviços/dia é carga leve para um Postgres gerenciado; o gargalo real seria sinal fraco, tratado pela fila offline.
 
 ## Limitações atuais / próximos passos
-- O app de administração cobre cadastro, etiquetas, histórico e filtro de vencidas. Faltam relatórios e a gestão de funcionários (por ora os usuários são criados no painel do Supabase).
+- O app de administração cobre cadastro, etiquetas, histórico e filtro de vencidas. Aba **Equipe** cria/edita/desativa funcionários e troca senhas (via função de servidor `supabase/functions/funcionarios`, que usa a chave de serviço; só admin ativo pode chamar). Faltam relatórios.
 - O técnico precisa abrir a ficha com internet ao menos uma vez antes de registrar offline (pré-carregar a rota do dia resolve).
-- Fotos do histórico ainda não são exibidas (guardamos o caminho; falta gerar URL assinada).
 - Ícones são provisórios (`scripts/gerar-icones.mjs`).
 - Não testado em celular real nem contra um Supabase real: a migração não foi aplicada nesta sessão.
 

@@ -72,3 +72,7 @@ a { color: var(--azul); }
 .abas a.active { background: var(--azul); color: #fff; border-color: var(--azul); }
 .linha-acoes { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .cancelado { text-decoration: line-through; opacity: .6; }
+.fotos { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+.fotos img { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; border: 1px solid var(--borda); display: block; }
+.selo { display: inline-block; font-size: .68rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; background: var(--fundo-azul); color: var(--azul); }
+.selo.inativo { background: #fde8e8; color: var(--erro); }

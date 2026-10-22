@@ -8,6 +8,7 @@ import { Clientes, ClienteForm } from './pages/Clientes';
 import { Servicos } from './pages/Servicos';
 import { ServicoEditar } from './pages/ServicoEditar';
 import { Etiquetas } from './pages/Etiquetas';
+import { Funcionarios } from './pages/Funcionarios';
 
 export function App() {
   const { session, perfil, carregando, sair } = useAuth();
@@ -23,7 +24,7 @@ export function App() {
       </header>
       <nav className="abas nao-imprime">
         <NavLink to="/" end>Aparelhos</NavLink><NavLink to="/servicos">Serviços</NavLink>
-        <NavLink to="/clientes">Clientes</NavLink><NavLink to="/etiquetas">Etiquetas</NavLink>
+        <NavLink to="/clientes">Clientes</NavLink><NavLink to="/etiquetas">Etiquetas</NavLink><NavLink to="/equipe">Equipe</NavLink>
       </nav>
       <Routes>
         <Route path="/" element={<Lista />} />
@@ -37,6 +38,7 @@ export function App() {
         <Route path="/clientes/novo" element={<ClienteForm />} />
         <Route path="/clientes/:id" element={<ClienteForm />} />
         <Route path="/etiquetas" element={<Etiquetas />} />
+        <Route path="/equipe" element={<Funcionarios />} />
       </Routes>
     </div>
   );
