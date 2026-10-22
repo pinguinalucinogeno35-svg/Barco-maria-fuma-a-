@@ -41,5 +41,6 @@ Cores e fonte (Poppins, empacotada para funcionar offline) vêm do site da Rede 
 
 ## Publicação (Vercel)
 Dois projetos na Vercel, um por app, ambos com `installCommand: npm install`, `buildCommand: node scripts/gerar-icones.mjs && npm run build -w apps/<app>`, `outputDirectory: apps/<app>/dist` e a raiz do repositório como diretório raiz. Variáveis: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` (os dois) e `VITE_TECNICO_URL` (só o admin: endereço público do app do técnico, que vai dentro do QR). `vercel.json` na raiz faz o fallback de rotas do PWA.
+- Checklist de entrada em produção: `docs/PRODUCAO.md`
 - Técnico: https://rede-frio-tecnico.vercel.app
 - Admin: ver projeto `rede-frio-admin` (alias `rede-frio-admin.vercel.app` se disponível)
