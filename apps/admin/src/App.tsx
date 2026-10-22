@@ -10,6 +10,8 @@ import { ServicoEditar } from './pages/ServicoEditar';
 import { Etiquetas } from './pages/Etiquetas';
 import { Funcionarios } from './pages/Funcionarios';
 import { Relatorios } from './pages/Relatorios';
+import { Importar } from './pages/Importar';
+import { EtiquetasImportacao } from './pages/EtiquetasImportacao';
 
 export function App() {
   const { session, perfil, carregando, sair } = useAuth();
@@ -41,6 +43,8 @@ export function App() {
         <Route path="/etiquetas" element={<Etiquetas />} />
         <Route path="/relatorios" element={<Relatorios />} />
         <Route path="/equipe" element={<Funcionarios />} />
+        <Route path="/importar" element={<Importar />} />
+        <Route path="/importar/:id/etiquetas" element={<EtiquetasImportacao />} />
       </Routes>
     </div>
   );

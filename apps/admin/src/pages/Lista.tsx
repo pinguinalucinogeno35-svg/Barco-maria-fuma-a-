@@ -16,7 +16,7 @@ export function Lista() {
   useEffect(() => {
     // espera o fim da digitacao; busca e paginacao no servidor (5 mil+ aparelhos)
     const t = setTimeout(async () => {
-      let q = sb.from('equipamentos_status').select('*, clientes!inner(nome)')
+      let q = sb.from('equipamentos_status').select('*, clientes!inner(nome)').eq('ativo', true)
         .order('criado_em', { ascending: false }).range(pagina * TAM_PAGINA, pagina * TAM_PAGINA + TAM_PAGINA - 1);
       if (soVencidas) q = q.lt('proxima_manutencao', new Date().toISOString());
       const termo = busca.trim().replace(/[,()%]/g, '');
@@ -34,6 +34,7 @@ export function Lista() {
           onChange={(e) => { setBusca(e.target.value); setPagina(0); }} />
         <Link to="/novo"><button className="primario" style={{ width: 'auto' }}>+ Aparelho</button></Link>
       </div>
+      <p style={{ margin: '0 0 8px' }}><Link to="/importar">Importar planilha de aparelhos</Link></p>
       <label style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
         <input type="checkbox" style={{ width: 22, height: 22, minHeight: 0, margin: 0 }} checked={soVencidas}
           onChange={(e) => { setSoVencidas(e.target.checked); setPagina(0); }} />

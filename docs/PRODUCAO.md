@@ -37,8 +37,8 @@ Os itens da seção 1 precisam estar resolvidos **antes de imprimir as etiquetas
 ## 4. Dados
 
 - [ ] **Apagar os dados de teste (Claude, quando você autorizar).** 1 cliente, 1 aparelho e 1 etiqueta de teste (e qualquer serviço lançado nos testes).
-- [ ] **Importar os aparelhos que já existem (Claude + cliente).** A Rede Frio atende ~5.000 aparelhos. Cadastrar um a um pelo celular não é viável. Falta construir uma **importação por planilha** (cliente, marca, modelo, local, BTUs, última manutenção) que também gere as etiquetas em lote. Precisa de uma planilha exemplo da cliente para definir as colunas.
-- [ ] **Definir a periodicidade correta por aparelho (cliente).** Hoje o padrão é 30 dias; a data da próxima manutenção e os alertas dependem disso.
+- [x] **Importação por planilha (feita).** Admin > Aparelhos > "Importar planilha de aparelhos": lê CSV, sugere as colunas pelo cabeçalho (você ajusta), mostra o resumo e os erros antes de gravar, não duplica clientes nem aparelhos com o mesmo número de série, tem modo teste (10 linhas) e "Desfazer" (arquiva o lote). Depois gera as etiquetas em páginas de 60 (QR + código + cliente + local) e uma planilha dos códigos para gráfica. **Falta testar com a planilha real da cliente.**
+- [ ] **Definir a periodicidade correta por aparelho (cliente).** O padrão é 30 dias (a planilha pode trazer a coluna). Aparelho sem nenhuma data passa a vencer 1 período depois do cadastro.
 - [ ] **Lista de clientes inicial (cliente).** O técnico só escolhe clientes já cadastrados; cadastrar os principais antes do piloto.
 - [ ] **Logo oficial (cliente).** O logo atual foi recriado a partir de um print. Enviar o arquivo oficial (SVG ou PNG transparente) e, se houver, um símbolo para o ícone do app.
 
@@ -65,7 +65,6 @@ Os itens da seção 1 precisam estar resolvidos **antes de imprimir as etiquetas
 
 ## 7. Melhorias técnicas depois do lançamento
 
-- Importação de aparelhos por planilha (ver seção 4).
 - Pré-carregar no celular os aparelhos do dia, para o técnico não precisar de internet na primeira leitura de cada aparelho.
 - Alertas automáticos de manutenção vencida (e-mail/WhatsApp) para o admin.
 - Recuperação de senha pelo próprio funcionário (hoje só o admin troca).

@@ -6,3 +6,4 @@ export * from './imagem';
 export * from './auth';
 export * from './Logo';
 export * from './Fotos';
+export * from './importacao';
