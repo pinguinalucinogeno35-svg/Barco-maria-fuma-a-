@@ -21,6 +21,27 @@ Monorepo com dois PWAs (React + Vite + TypeScript) sobre Supabase.
 2. **Técnico** cola a etiqueta no aparelho e a lê com o app: se for nova, cadastra o aparelho (cliente, marca, modelo, local…) e já lança o serviço. Tudo funciona offline.
 3. **Técnico** vê em *Meus serviços* a contagem (hoje/mês/total) e os detalhes do que fez. **Admin** vê tudo, com resumo por funcionário no mês, e pode corrigir ou cancelar serviços (nada é apagado; cancelados não contam).
 
+## Rodando no seu computador e no celular (VS Code + Android)
+
+Requisitos: [Git](https://git-scm.com) e [Node.js 22](https://nodejs.org). Computador e celular na **mesma rede Wi-Fi**.
+
+```bash
+git clone https://github.com/pinguinalucinogeno35-svg/Barco-maria-fuma-a-
+cd Barco-maria-fuma-a-
+git checkout claude/qr-code-ac-maintenance-nmu1j7
+cp .env.example .env          # no Windows (PowerShell): Copy-Item .env.example .env
+npm install
+npm run dev:tecnico:celular   # app do tecnico (porta 5173)  |  npm run dev:admin:celular  (porta 5174)
+```
+
+O terminal mostra duas linhas, `Local` e `Network`. No celular abra o endereço **Network** (ex.: `https://192.168.0.15:5173`).
+- O navegador avisa "conexão não é particular" porque o certificado de teste é autoassinado: toque em *Avançado* e *Continuar*. Sem HTTPS a câmera do QR não abre.
+- Cada vez que você salvar um arquivo no VS Code, a tela do celular atualiza sozinha.
+- Use `npm run dev:tecnico` / `dev:admin` (sem `:celular`) para abrir só no computador, em `http://localhost`.
+- **Atenção:** o ambiente local usa o mesmo banco da produção. Dados criados nos testes aparecem para todos.
+- Para receber as alterações novas feitas no repositório: `git pull` (no VS Code: Controle do Código-Fonte, "..." e *Pull*).
+- Se o celular não conectar: o firewall do Windows pode estar bloqueando a porta; permita o Node.js em redes privadas. Alternativa por cabo USB: ative a Depuração USB no celular, abra `chrome://inspect/#devices` no Chrome do computador, em *Port forwarding* adicione `5173` e `5174` apontando para `localhost:5173` e `localhost:5174`, e abra `http://localhost:5173` no celular.
+
 ## Decisões para suportar 20 técnicos simultâneos / 5 mil aparelhos
 - **QR = URL** `https://<app-tecnico>/e/AC-XXXXXXXX`. O código é aleatório (sem número sequencial adivinhável) e a etiqueta usa correção de erro alta.
 - **Offline-first no técnico:** registros vão para uma fila no IndexedDB e sincronizam ao voltar o sinal. Cada registro tem UUID gerado no celular, então reenviar nunca duplica. Fichas dos equipamentos abertos ficam em cache (até 300).

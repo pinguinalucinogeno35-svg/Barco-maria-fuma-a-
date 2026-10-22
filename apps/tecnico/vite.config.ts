@@ -1,12 +1,15 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+import basicSsl from '@vitejs/plugin-basic-ssl';
 
 export default defineConfig({
   envDir: '../..',
   server: { port: 5173 },
   plugins: [
     react(),
+    // `npm run dev:*:celular` liga HTTPS de teste: a camera do celular exige conexao segura
+    ...(process.env.DEV_HTTPS ? [basicSsl()] : []),
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {

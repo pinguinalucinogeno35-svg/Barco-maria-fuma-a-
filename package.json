@@ -1,12 +1,20 @@
 {
   "name": "ar-condicionado-qr",
   "private": true,
-  "workspaces": ["packages/*", "apps/*"],
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "scripts": {
     "dev:tecnico": "npm run dev -w apps/tecnico",
     "dev:admin": "npm run dev -w apps/admin",
     "build": "npm run build -w apps/tecnico && npm run build -w apps/admin",
     "typecheck": "npm run typecheck -w packages/shared && npm run typecheck -w apps/tecnico && npm run typecheck -w apps/admin",
-    "test": "npm run test -w packages/shared"
+    "test": "npm run test -w packages/shared",
+    "dev:tecnico:celular": "cross-env DEV_HTTPS=1 npm run dev -w apps/tecnico",
+    "dev:admin:celular": "cross-env DEV_HTTPS=1 npm run dev -w apps/admin"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0"
   }
 }
